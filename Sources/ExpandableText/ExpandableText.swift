@@ -86,19 +86,17 @@ public struct ExpandableText: View {
                     withAnimation(expandAnimation) { isExpanded.toggle() }
                 }
             }
-            .modifier(OverlayAdapter(alignment: .trailingLastTextBaseline, view: {
-                if shouldShowMoreButton {
-                    if let moreButtonPressedColor {
-                        button
-                            .buttonStyle(
-                                .pressedColorButton(moreButtonColor, moreButtonPressedColor)
-                            )
-                    } else {
-                        button
-                            .foregroundColor(moreButtonColor)
-                    }
+            .modifier(OverlayAdapter(alignment: .trailingLastTextBaseline) {
+                if let moreButtonPressedColor {
+                    button
+                        .buttonStyle(
+                            .pressedColorButton(moreButtonColor, moreButtonPressedColor)
+                        )
+                } else {
+                    button
+                        .foregroundColor(moreButtonColor)
                 }
-            }))
+            })
     }
     
     private var content: some View {
@@ -119,6 +117,7 @@ public struct ExpandableText: View {
             Text(moreButtonText)
                 .font(moreButtonFont ?? font)
         }
+        .opacity(shouldShowMoreButton ? 1 : 0)
     }
 
     private var shouldShowMoreButton: Bool {
