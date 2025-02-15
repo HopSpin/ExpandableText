@@ -35,8 +35,10 @@ public struct ExpandableText: View {
     @State private var moreTextSize: CGSize = .zero
     
     private let text: String
+    private let isMarkdown: Bool
     internal var font: Font = .body
     internal var color: Color = .primary
+    internal var tintColor: Color = .secondary
     internal var lineLimit: Int = 3
     internal var moreButtonText: String = "more"
     internal var moreButtonFont: Font?
@@ -51,8 +53,9 @@ public struct ExpandableText: View {
      - Parameter text: The initial text string to display in the `ExpandableText` view.
      - Returns: A new `ExpandableText` instance with the specified text string and trimming applied.
      */
-    public init(_ text: String) {
+    public init(_ text: String, isMarkdown: Bool = false) {
         self.text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.isMarkdown = isMarkdown
     }
     
     public var body: some View {
@@ -100,14 +103,24 @@ public struct ExpandableText: View {
     }
     
     private var content: some View {
-        Text(.init(
+        textContainer(.init(
             trimMultipleNewlinesWhenTruncated
                 ? (shouldShowMoreButton ? textTrimmingDoubleNewlines : text)
                 : text
         ))
         .font(font)
         .foregroundColor(color)
+        .tint(tintColor)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func textContainer(_ string: String) -> some View {
+        if isMarkdown,
+           let markdown = try? AttributedString(markdown: string, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
+            Text(markdown)
+        } else {
+            Text(verbatim: string)
+        }
     }
 
     private var button: some View {

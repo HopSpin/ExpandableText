@@ -33,6 +33,17 @@ public extension ExpandableText {
     }
     
     /**
+     Sets the tint color for the text in the `ExpandableText` instance.
+     - Parameter color: The tint color to use for the text. Defaults to `secondary`
+     - Returns: A new `ExpandableText` instance with the specified tint color applied.
+     */
+    func tintColor(_ tintColor: Color) -> Self {
+        var copy = self
+        copy.tintColor = tintColor
+        return copy
+    }
+
+    /**
      Sets the maximum number of lines to use for rendering the text in the `ExpandableText` instance.
      - Parameter limit: The maximum number of lines to use for rendering the text. Defaults to `3`
      - Returns: A new `ExpandableText` instance with the specified line limit applied.
